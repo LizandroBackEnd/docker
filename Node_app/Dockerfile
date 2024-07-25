@@ -7,4 +7,13 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - &&\
 WORKDIR /app 
 COPY app.js ./
 
-CMD node app.js
+EXPOSE 3000
+
+# Shell form
+#CMD node app.js 
+
+# Exec form 
+#CMD ["node", "app.js"]
+
+# Entrypoint form
+ENTRYPOINT [ "node" ]
