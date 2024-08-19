@@ -1,23 +1,15 @@
 FROM python:3.10
 
-#FROM ubuntu:22.04 
-#RUN apt update && apt install -y python3 python3-venv  
+RUN pip install pipenv
 
-WORKDIR /app 
-
-RUN python3 -m venv .venv
-
-ENV VIRTUAL_ENV=/app/.venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PIPENV_VENV_IN_PROJECT=1
 ENV FLASK_APP=src.app
 
+WORKDIR /app
+COPY Pipfile* ./
+RUN pipenv install 
+COPY . . 
 
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+EXPOSE 5000 
 
-COPY . .
-
-EXPOSE 5000
-
-CMD flask run --host 0.0.0.0
-
+CMD pipenv run flask run --host 0.0.0.0
