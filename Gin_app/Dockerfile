@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 
+FROM ubuntu:22.04 AS builder
 
 RUN apt update \
     && apt install -y curl \
@@ -11,8 +11,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download 
 COPY . . 
-RUN go build 
+RUN go build  
 
+FROM ubuntu:22.04
+WORKDIR /app 
+COPY --from=builder /app/app-go ./
 EXPOSE 8080
-
 CMD ./app_go
